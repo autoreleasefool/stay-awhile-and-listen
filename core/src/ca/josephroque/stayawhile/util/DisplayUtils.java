@@ -1,8 +1,5 @@
 package ca.josephroque.stayawhile.util;
 
-/**
- * Created by josephroque on 2016-06-25.
- */
 public class DisplayUtils {
 
     public static int constrain(int origMin, int origMax, int min, int max, int value) {
@@ -11,5 +8,13 @@ public class DisplayUtils {
 
         float percentage = (value - min) / (float) oldRange;
         return (int) (percentage * newRange + min);
+    }
+
+    public static float constrain(float origMin, float origMax, float min, float max, float value) {
+        float oldRange = origMax - origMin;
+        float newRange = max - min;
+
+        float percentage = (value - min) / oldRange;
+        return percentage * newRange + min;
     }
 }

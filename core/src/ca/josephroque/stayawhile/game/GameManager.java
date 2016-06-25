@@ -2,6 +2,12 @@ package ca.josephroque.stayawhile.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.josephroque.stayawhile.game.entity.Entity;
+import ca.josephroque.stayawhile.game.entity.Grabbable;
+import ca.josephroque.stayawhile.game.entity.Plant;
 import ca.josephroque.stayawhile.game.entity.Player;
 import ca.josephroque.stayawhile.game.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
@@ -16,12 +22,15 @@ public class GameManager {
     int level = 0;
 
     private final Player player;
+    private final List<Grabbable> interactiveObjects;
 
     public GameManager(GameScreen gameScreen, GameInput input, Textures textures) {
         this.gameScreen = gameScreen;
         this.gameInput = input;
         this.textures = textures;
+
         player = new Player(0, 0);
+        interactiveObjects = new ArrayList<Grabbable>();
     }
 
     public void tick(GameScreen.GameState gameState, float delta) {
@@ -31,7 +40,13 @@ public class GameManager {
             updateLevel();
         }
 
-        player.tick(gameInput, delta);
+        player.handleInput(gameInput);
+        player.tick(delta);
+
+        for (Entity entity : interactiveObjects) {
+            entity.handleInput(gameInput);
+            entity.tick(delta);
+        }
     }
 
     public void draw(GameScreen.GameState gameState, SpriteBatch spriteBatch) {
@@ -54,11 +69,22 @@ public class GameManager {
                             GameScreen.BLOCK_SIZE,
                             GameScreen.BLOCK_SIZE);
                 }
+
+                for (Entity entity : interactiveObjects) {
+                    entity.draw(textures, spriteBatch);
+                }
                 break;
         }
     }
 
     private void updateLevel() {
         level++;
+
+        interactiveObjects.clear();
+
+        switch (level) {
+            case 1:
+                interactiveObjects.add(new Plant(GameScreen.BLOCK_SIZE * 10, GameScreen.BLOCK_SIZE * 2, 1, 2));
+        }
     }
 }

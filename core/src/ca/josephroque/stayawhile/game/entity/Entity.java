@@ -1,44 +1,96 @@
 package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
-import com.badlogic.gdx.math.Vector2;
 
 import ca.josephroque.stayawhile.game.graphics.Textures;
+import ca.josephroque.stayawhile.input.GameInput;
+import ca.josephroque.stayawhile.screen.GameScreen;
 
 public abstract class Entity {
 
-    private Vector2 mVelocity;
-
-    public Entity() {
-        mVelocity = new Vector2();
-    }
+    protected Rectangle boundingBox;
+    float xVelocity;
+    float yVelocity;
 
     public abstract void tick(float delta);
 
     public abstract void draw(Textures textures, SpriteBatch spriteBatch);
 
-    public abstract float getX();
+    public abstract void handleInput(GameInput gameInput);
 
-    public abstract float getY();
+    public Entity(float x, float y, float width, float height) {
+        boundingBox = new Rectangle(x, y, width, height);
+    }
 
-    public abstract float getWidth();
+    public float getX() {
+        return boundingBox.getX();
+    }
 
-    public abstract float getHeight();
+    public float getY() {
+        return boundingBox.getY();
+    }
 
-    public abstract Shape2D getBounds();
+    public float getCenterX() {
+        return getX() + getWidth() / 2;
+    }
 
-    public abstract void updatePosition(float delta);
+    public float getCenterY() {
+        return getY() + getHeight() / 2;
+    }
+
+    public float getWidth() {
+        return boundingBox.getWidth();
+    }
+
+    public float getHeight() {
+        return boundingBox.getHeight();
+    }
+
+    public Shape2D getBounds() {
+        return boundingBox;
+    }
+
+    public void updatePosition(float delta) {
+        boundingBox.setPosition(getX() + getXVelocity() * delta, getY() + getYVelocity() * delta);
+    }
 
     public float getXVelocity() {
-        return mVelocity.x;
+        return xVelocity;
     }
 
     public float getYVelocity() {
-        return mVelocity.y;
+        return yVelocity;
     }
 
-    void setVelocity(Vector2 velocity) {
-        mVelocity.set(velocity);
+    public void setXVelocity(float xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public void setYVelocity(float yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+    public void snapToCell() {
+        int xRemainder = ((int) getX()) % GameScreen.BLOCK_SIZE;
+        int yRemainder = ((int) getY()) % GameScreen.BLOCK_SIZE;
+
+        int xOffset = 0;
+        int yOffset = 0;
+
+        if (xRemainder < GameScreen.BLOCK_SIZE / 2) {
+            xOffset -= xRemainder;
+        } else {
+            xOffset += GameScreen.BLOCK_SIZE - xRemainder;
+        }
+
+        if (yRemainder < GameScreen.BLOCK_SIZE / 2) {
+            yOffset -= yRemainder;
+        } else {
+            yOffset += GameScreen.BLOCK_SIZE - yRemainder;
+        }
+
+        boundingBox.setPosition(getX() + xOffset, getY() + yOffset);
     }
 }

@@ -91,7 +91,7 @@ public class GameScreen
         }
 
         // Clear up input
-        // TODO: mGameInput.tick();
+        mGameInput.tick();
     }
 
     private void draw() {
