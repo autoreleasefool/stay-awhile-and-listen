@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Shape2D;
 
+import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
-import ca.josephroque.stayawhile.screen.GameScreen;
+import ca.josephroque.stayawhile.util.DisplayUtils;
 
 public abstract class Entity {
 
@@ -14,13 +15,16 @@ public abstract class Entity {
     float xVelocity;
     float yVelocity;
 
+    protected Level level;
+
     public abstract void tick(float delta);
 
     public abstract void draw(Textures textures, SpriteBatch spriteBatch);
 
     public abstract void handleInput(GameInput gameInput);
 
-    public Entity(float x, float y, float width, float height) {
+    public Entity(Level level, float x, float y, float width, float height) {
+        this.level = level;
         boundingBox = new Rectangle(x, y, width, height);
     }
 
@@ -72,25 +76,8 @@ public abstract class Entity {
         this.yVelocity = yVelocity;
     }
 
-    public void snapToCell() {
-        int xRemainder = ((int) getX()) % GameScreen.BLOCK_SIZE;
-        int yRemainder = ((int) getY()) % GameScreen.BLOCK_SIZE;
-
-        int xOffset = 0;
-        int yOffset = 0;
-
-        if (xRemainder < GameScreen.BLOCK_SIZE / 2) {
-            xOffset -= xRemainder;
-        } else {
-            xOffset += GameScreen.BLOCK_SIZE - xRemainder;
-        }
-
-        if (yRemainder < GameScreen.BLOCK_SIZE / 2) {
-            yOffset -= yRemainder;
-        } else {
-            yOffset += GameScreen.BLOCK_SIZE - yRemainder;
-        }
-
-        boundingBox.setPosition(getX() + xOffset, getY() + yOffset);
+    public void snapToNearestCell() {
+        boundingBox.setPosition(DisplayUtils.getSnappedValue(getX()),
+                DisplayUtils.getSnappedValue(getY()));
     }
 }

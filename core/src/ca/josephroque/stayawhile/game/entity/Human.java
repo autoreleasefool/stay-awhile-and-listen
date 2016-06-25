@@ -2,6 +2,7 @@ package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.screen.GameScreen;
 import ca.josephroque.stayawhile.util.DisplayUtils;
@@ -11,6 +12,7 @@ public abstract class Human
 
     public static final int WIDTH = GameScreen.BLOCK_SIZE;
     public static final int HEIGHT = GameScreen.BLOCK_SIZE * 2;
+    public static final int JUMP_HEIGHT = 7;
 
     private float speed;
 
@@ -18,8 +20,8 @@ public abstract class Human
     private int targetX = -1;
     private int targetY = -1;
 
-    public Human(float x, float y, float speed) {
-        super(x, y, WIDTH, HEIGHT);
+    public Human(Level level, float x, float y, float speed) {
+        super(level, x, y, WIDTH, HEIGHT);
         this.speed = speed;
     }
 
@@ -52,6 +54,10 @@ public abstract class Human
                 getY(),
                 getWidth(),
                 getHeight());
+    }
+
+    protected void jump() {
+        setYVelocity(-Human.JUMP_HEIGHT);
     }
 
     public static float getAverageSpeed() {

@@ -1,0 +1,12 @@
+{
+  "type": "hallway",
+  "length": 48,
+  "grabbable": [
+    {
+      "type": "plant",
+      "size": "2",
+      "x": "12",
+      "y": "2"
+    }
+  ]
+}

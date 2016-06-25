@@ -2,13 +2,8 @@ package ca.josephroque.stayawhile.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ca.josephroque.stayawhile.game.entity.Entity;
-import ca.josephroque.stayawhile.game.entity.Grabbable;
-import ca.josephroque.stayawhile.game.entity.Plant;
 import ca.josephroque.stayawhile.game.entity.Player;
+import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.screen.GameScreen;
@@ -19,18 +14,17 @@ public class GameManager {
     private GameInput gameInput;
     private Textures textures;
 
-    int level = 0;
+    int levelNumber = 0;
+    Level currentLevel;
 
     private final Player player;
-    private final List<Grabbable> interactiveObjects;
 
     public GameManager(GameScreen gameScreen, GameInput input, Textures textures) {
         this.gameScreen = gameScreen;
         this.gameInput = input;
         this.textures = textures;
 
-        player = new Player(0, 0);
-        interactiveObjects = new ArrayList<Grabbable>();
+        player = new Player(null, 0, 0);
     }
 
     public void tick(GameScreen.GameState gameState, float delta) {
@@ -43,20 +37,13 @@ public class GameManager {
         player.handleInput(gameInput);
         player.tick(delta);
 
-        for (Entity entity : interactiveObjects) {
-            entity.handleInput(gameInput);
-            entity.tick(delta);
-        }
+        currentLevel.handleInput(gameInput);
+        currentLevel.tick(delta);
     }
 
     public void draw(GameScreen.GameState gameState, SpriteBatch spriteBatch) {
 
-        // Draw the background
-        spriteBatch.draw(textures.getColor(Textures.Color.Black),
-                0,
-                0,
-                GameScreen.WORLD_WIDTH,
-                GameScreen.BLOCK_SIZE * 2);
+        currentLevel.drawBackground(textures, spriteBatch, player.getCenterX());
 
         switch (gameState) {
             case GamePlaying:
@@ -70,21 +57,14 @@ public class GameManager {
                             GameScreen.BLOCK_SIZE);
                 }
 
-                for (Entity entity : interactiveObjects) {
-                    entity.draw(textures, spriteBatch);
-                }
+                currentLevel.drawForeground(textures, spriteBatch);
                 break;
         }
     }
 
     private void updateLevel() {
-        level++;
-
-        interactiveObjects.clear();
-
-        switch (level) {
-            case 1:
-                interactiveObjects.add(new Plant(GameScreen.BLOCK_SIZE * 10, GameScreen.BLOCK_SIZE * 2, 1, 2));
-        }
+        levelNumber++;
+        currentLevel = Level.loadLevel(levelNumber);
+        player.setLevel(currentLevel);
     }
 }

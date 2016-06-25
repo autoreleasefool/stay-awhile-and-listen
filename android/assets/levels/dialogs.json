@@ -1,0 +1,32 @@
+{
+  "dialogs": [
+    {
+      "text": [
+        "Hey, kid!",
+        "Come over here for a minute!",
+        "Boy, have I got a story to tell you."
+      ]
+    },
+    {
+      "text": [
+        "Son!",
+        "Why not stay awhile and listen?",
+        "You're going to love this!",
+      ]
+    },
+    {
+      "text": [
+        "Oh, a visitor!",
+        "My family never visits me anymore.",
+        "I'm glad you're here to keep me company.",
+      ]
+    },
+    {
+      "text": [
+        "Excuse me, miss?",
+        "Could I get the sheets changed?",
+        "Someone soiled them last night!",
+      ]
+    }
+  ]
+}

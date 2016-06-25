@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ca.josephroque.stayawhile.game.GameManager;
@@ -21,10 +22,10 @@ public class GameScreen
     private static int sScreenHeight;
 
     public static final int BLOCK_SIZE = 16;
-    public static final int VERTICAL_BLOCKS = 16;
-    public static final int HORIZONTAL_BLOCKS = 12;
-    public static final int WORLD_WIDTH = BLOCK_SIZE * VERTICAL_BLOCKS;
-    public static final int WORLD_HEIGHT = BLOCK_SIZE * HORIZONTAL_BLOCKS;;
+    public static final int HORIZONTAL_BLOCKS = 16;
+    public static final int VERTICAL_BLOCKS = 12;
+    public static final int WORLD_WIDTH = BLOCK_SIZE * HORIZONTAL_BLOCKS;
+    public static final int WORLD_HEIGHT = BLOCK_SIZE * VERTICAL_BLOCKS;
 
     private SpriteBatch mSpriteBatch;
     private OrthographicCamera mPrimaryCamera;
@@ -46,7 +47,7 @@ public class GameScreen
         mPrimaryCamera = new OrthographicCamera();
         mPrimaryCamera.translate(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
         mPrimaryCamera.setToOrtho(false, WORLD_WIDTH, WORLD_HEIGHT);
-        mPrimaryViewport = new FillViewport(WORLD_WIDTH, WORLD_HEIGHT, mPrimaryCamera);
+        mPrimaryViewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, mPrimaryCamera);
         mPrimaryViewport.apply();
 
         // Preparing UI objects
@@ -97,6 +98,7 @@ public class GameScreen
     private void draw() {
         mSpriteBatch.setProjectionMatrix(mPrimaryCamera.combined);
         mSpriteBatch.begin();
+        mSpriteBatch.enableBlending();
 
 //        mBackgroundManager.draw(mSpriteBatch);
         mGameManager.draw(mGameState, mSpriteBatch);
