@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ca.josephroque.stayawhile.game.GameManager;
-import ca.josephroque.stayawhile.game.graphics.Textures;
+import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 
 public class GameScreen

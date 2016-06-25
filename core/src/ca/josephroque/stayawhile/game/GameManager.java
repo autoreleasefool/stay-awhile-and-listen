@@ -9,7 +9,7 @@ import ca.josephroque.stayawhile.game.entity.Entity;
 import ca.josephroque.stayawhile.game.entity.Grabbable;
 import ca.josephroque.stayawhile.game.entity.Plant;
 import ca.josephroque.stayawhile.game.entity.Player;
-import ca.josephroque.stayawhile.game.graphics.Textures;
+import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.screen.GameScreen;
 

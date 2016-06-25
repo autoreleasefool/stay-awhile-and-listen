@@ -1,10 +1,8 @@
 package ca.josephroque.stayawhile.game.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
-import ca.josephroque.stayawhile.game.graphics.Textures;
+import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.screen.GameScreen;
 import ca.josephroque.stayawhile.util.DisplayUtils;
 
@@ -62,6 +60,6 @@ public abstract class Human
                 GameScreen.WORLD_WIDTH,
                 0,
                 GameScreen.getScreenWidth(),
-                GameScreen.BLOCK_SIZE * 1.5f);
+                GameScreen.BLOCK_SIZE * 1f);
     }
 }

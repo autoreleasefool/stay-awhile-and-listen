@@ -1,4 +1,4 @@
-package ca.josephroque.stayawhile.game.graphics;
+package ca.josephroque.stayawhile.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

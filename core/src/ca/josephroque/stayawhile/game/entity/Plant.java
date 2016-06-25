@@ -2,7 +2,7 @@ package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import ca.josephroque.stayawhile.game.graphics.Textures;
+import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.screen.GameScreen;
 
 public class Plant extends Grabbable {
