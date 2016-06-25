@@ -21,8 +21,8 @@ public class GameScreen
     private static int sScreenHeight;
 
     public static final int BLOCK_SIZE = 16;
-    public static final int VERTICAL_BLOCKS = 32;
-    public static final int HORIZONTAL_BLOCKS = 24;
+    public static final int VERTICAL_BLOCKS = 16;
+    public static final int HORIZONTAL_BLOCKS = 12;
     public static final int WORLD_WIDTH = BLOCK_SIZE * VERTICAL_BLOCKS;
     public static final int WORLD_HEIGHT = BLOCK_SIZE * HORIZONTAL_BLOCKS;;
 
@@ -58,7 +58,7 @@ public class GameScreen
 
         // Setting up the game and menu
         mTextures = new Textures();
-        mGameManager = new GameManager(this, mTextures);
+        mGameManager = new GameManager(this, mGameInput, mTextures);
 
         // Displaying the main menu
         setState(GameState.GameStarting);
@@ -81,7 +81,7 @@ public class GameScreen
                 break;
             case GameStarting:
             case GamePlaying:
-                mGameManager.tick(mGameState, mGameInput, delta);
+                mGameManager.tick(mGameState, delta);
                 break;
             case GamePaused:
             case Ended:

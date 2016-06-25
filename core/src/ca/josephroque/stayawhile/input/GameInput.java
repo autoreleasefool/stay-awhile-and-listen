@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import ca.josephroque.stayawhile.screen.GameScreen;
+import ca.josephroque.stayawhile.util.DisplayUtils;
 
 public class GameInput
         implements InputProcessor {
@@ -18,6 +19,30 @@ public class GameInput
     private boolean mFingerDown;
     private long mFingerDownTime;
     private boolean mFingerJustReleased;
+
+    public int getLastFingerXCell() {
+        return getLastFingerXConstrained() / GameScreen.BLOCK_SIZE;
+    }
+
+    public int getLastFingerYCell() {
+        return getLastFingerYConstrained() / GameScreen.BLOCK_SIZE;
+    }
+
+    public int getLastFingerXConstrained() {
+        return DisplayUtils.constrain(0,
+                GameScreen.getScreenWidth(),
+                0,
+                GameScreen.WORLD_WIDTH,
+                getLastFingerX());
+    }
+
+    public int getLastFingerYConstrained() {
+        return DisplayUtils.constrain(0,
+                GameScreen.getScreenHeight(),
+                0,
+                GameScreen.WORLD_HEIGHT,
+                getLastFingerY());
+    }
 
     public int getLastFingerX() {
         return mLastFingerX;

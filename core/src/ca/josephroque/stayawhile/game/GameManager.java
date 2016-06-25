@@ -10,19 +10,21 @@ import ca.josephroque.stayawhile.screen.GameScreen;
 public class GameManager {
 
     private GameScreen gameScreen;
+    private GameInput gameInput;
     private Textures textures;
 
     int level = 0;
 
     private final Player player;
 
-    public GameManager(GameScreen gameScreen, Textures textures) {
+    public GameManager(GameScreen gameScreen, GameInput input, Textures textures) {
         this.gameScreen = gameScreen;
+        this.gameInput = input;
         this.textures = textures;
         player = new Player(0, 0);
     }
 
-    public void tick(GameScreen.GameState gameState, GameInput gameInput, float delta) {
+    public void tick(GameScreen.GameState gameState, float delta) {
         if (gameState == GameScreen.GameState.GameStarting) {
             player.resetLocation();
             gameScreen.setState(GameScreen.GameState.GamePlaying);
@@ -44,6 +46,14 @@ public class GameManager {
         switch (gameState) {
             case GamePlaying:
                 player.draw(textures, spriteBatch);
+
+                if (gameInput.isFingerDown()) {
+                    spriteBatch.draw(textures.getColor(Textures.Color.Yellow),
+                            gameInput.getLastFingerXCell() * GameScreen.BLOCK_SIZE,
+                            gameInput.getLastFingerYCell() * GameScreen.BLOCK_SIZE,
+                            GameScreen.BLOCK_SIZE,
+                            GameScreen.BLOCK_SIZE);
+                }
                 break;
         }
     }
