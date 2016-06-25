@@ -1,13 +1,11 @@
 package ca.josephroque.stayawhile.game.entity;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.screen.GameScreen;
-import ca.josephroque.stayawhile.util.DisplayUtils;
 
 public class Player extends Human {
 
@@ -43,7 +41,7 @@ public class Player extends Human {
 
         drawX -= getWidth() / 2;
 
-        spriteBatch.draw(textures.getColor(Textures.Color.Red),
+        spriteBatch.draw(textures.getPlayer(Human.Position.parseOrdinal(direction)),
                 drawX,
                 getY(),
                 getWidth(),

@@ -15,6 +15,7 @@ public abstract class Human
     public static final int JUMP_HEIGHT = 7;
 
     private float speed;
+    protected int direction = 1;
 
     private boolean hasTarget = false;
     private int targetX = -1;
@@ -29,6 +30,16 @@ public abstract class Human
         targetX = x;
         targetY = y;
         hasTarget = true;
+    }
+
+    @Override
+    public void updatePosition(float delta) {
+        super.updatePosition(delta);
+        if (getXVelocity() < 0) {
+            direction = 0;
+        } else if (getXVelocity() > 0) {
+            direction = 1;
+        }
     }
 
     @Override
@@ -49,11 +60,7 @@ public abstract class Human
 
     @Override
     public void draw(Textures textures, SpriteBatch spriteBatch) {
-        spriteBatch.draw(textures.getColor(Textures.Color.Green),
-                getX(),
-                getY(),
-                getWidth(),
-                getHeight());
+        // TODO: draw person
     }
 
     protected void jump() {
@@ -67,5 +74,24 @@ public abstract class Human
                 0,
                 GameScreen.getScreenWidth(),
                 GameScreen.BLOCK_SIZE * 1f);
+    }
+
+    public enum Position {
+        Left,
+        Right,
+        LeftWalk1,
+        LeftWalk2,
+        RightWalk1,
+        RightWalk2,
+        LeftJump,
+        RightJump;
+
+        public static Position parseOrdinal(int ordinal) {
+            switch (ordinal) {
+                case 1: return Left;
+                case 2: return Right;
+                default: return null;
+            }
+        }
     }
 }
