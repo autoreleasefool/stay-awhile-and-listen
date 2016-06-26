@@ -94,7 +94,7 @@ public class GameInput
     public void tick() {
         mFingerJustReleased = false;
 
-        if (isFingerDown() && !mFingerDragConsumeable && mFingerDownTime > MAXIMUM_CLICK_HOLD_THRESHOLD) {
+        if (isFingerDown() && !mFingerDragConsumeable && TimeUtils.timeSinceMillis(mFingerDownTime) > MAXIMUM_CLICK_HOLD_THRESHOLD) {
             mFingerDragConsumeable = true;
             mFingerDragConsumed = false;
         }

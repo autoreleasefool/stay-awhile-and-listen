@@ -19,6 +19,13 @@ public class Player extends Human {
 
     public void resetLocation() {
         boundingBox.setPosition(0, GameScreen.BLOCK_SIZE * 2);
+        level.setPlayerLocation(getX(), getY());
+    }
+
+    @Override
+    public void tick(float delta) {
+        super.tick(delta);
+        level.setPlayerLocation(getX(), getY());
     }
 
     public void handleInput(GameInput gameInput) {

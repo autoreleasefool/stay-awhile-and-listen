@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.JsonValue;
 
 import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.input.GameInput;
+import ca.josephroque.stayawhile.screen.GameScreen;
 
 public abstract class Grabbable extends Entity {
 
@@ -38,7 +39,7 @@ public abstract class Grabbable extends Entity {
     public static Grabbable create(Level level, JsonValue json) {
         String type = json.getString("type");
         if (type.equals("plant")) {
-            return new Plant(level, json.getInt("x"), json.getInt("y"), json.getInt("size"));
+            return new Plant(level, json.getInt("x") * GameScreen.BLOCK_SIZE, json.getInt("y") * GameScreen.BLOCK_SIZE, json.getInt("size"));
         }
 
         return null;

@@ -1,5 +1,6 @@
 package ca.josephroque.stayawhile.game.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ca.josephroque.stayawhile.game.level.Level;
@@ -105,6 +106,18 @@ public abstract class Human
                 case 7: return RightJump;
                 default: return null;
             }
+        }
+    }
+
+    public static int[] getSkinColors() {
+        int rand = (int) (Math.random() * 3);
+        switch (rand) {
+            default:
+                return new int[]{Color.rgb888(255,199,161), Color.rgb888(255,181,131), Color.rgb888(255,191,142), Color.rgb888(231,172,117)};
+            case 1:
+                return new int[]{Color.rgb888(167,112,82), Color.rgb888(153,101,74), Color.rgb888(132,78,61), Color.rgb888(107,64,44)};
+            case 2:
+                return new int[]{Color.rgb888(215,169,139), Color.rgb888(209,156,126), Color.rgb888(190,134,107), Color.rgb888(165,114,85)};
         }
     }
 }

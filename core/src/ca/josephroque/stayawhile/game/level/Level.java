@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.josephroque.stayawhile.game.entity.Doorway;
 import ca.josephroque.stayawhile.game.entity.Entity;
 import ca.josephroque.stayawhile.game.entity.Grabbable;
 import ca.josephroque.stayawhile.graphics.Textures;
@@ -20,10 +21,14 @@ public class Level {
 
     private Cell[][] cells;
     private final List<Grabbable> interactiveObjects;
+    private final List<Doorway> doorways;
     private float drawOffset = 0;
+    private float playerX, playerY;
+    private boolean lost;
 
     private Level() {
         interactiveObjects = new ArrayList<Grabbable>();
+        doorways = new ArrayList<Doorway>();
     }
 
     public boolean canEnterCell(int x, int y) {
@@ -42,6 +47,18 @@ public class Level {
         return cells.length * GameScreen.BLOCK_SIZE;
     }
 
+    public float getPlayerX() {
+        return playerX;
+    }
+    public float getPlayerY() {
+        return playerY;
+    }
+
+    public void setPlayerLocation(float x, float y) {
+        this.playerX = x;
+        this.playerY = y;
+    }
+
     public float getDrawOffset() {
         return drawOffset;
     }
@@ -50,12 +67,33 @@ public class Level {
         for (Entity entity : interactiveObjects) {
             entity.handleInput(gameInput);
         }
+
+        for (Entity entity : doorways) {
+            entity.handleInput(gameInput);
+        }
     }
 
     public void tick(float delta) {
         for (Entity entity : interactiveObjects) {
             entity.tick(delta);
         }
+
+        for (Doorway doorway : doorways) {
+            if (DisplayUtils.isOnScreen(this, doorway.getX(), doorway.getWidth())) {
+                doorway.tick(interactiveObjects, delta);
+                if (doorway.hasLost()) {
+                    lose();
+                }
+            }
+        }
+    }
+
+    private void lose() {
+        lost = true;
+    }
+
+    public boolean hasLost() {
+        return lost;
     }
 
     public void drawBackground(Textures textures, SpriteBatch spriteBatch, float playerX) {
@@ -100,6 +138,12 @@ public class Level {
     }
 
     public void drawForeground(Textures textures, SpriteBatch spriteBatch) {
+        for (Entity entity : doorways) {
+            if (DisplayUtils.isOnScreen(this, entity.getX(), entity.getWidth())) {
+                entity.draw(textures, spriteBatch);
+            }
+        }
+
         for (Entity entity : interactiveObjects) {
             if (DisplayUtils.isOnScreen(this, entity.getX(), entity.getWidth())) {
                 entity.draw(textures, spriteBatch);
@@ -107,7 +151,7 @@ public class Level {
         }
     }
 
-    public static Level loadLevel(int levelNumber) {
+    public static Level loadLevel(Textures textures, int levelNumber) {
         // Load the level file into a JSON object
         String levelString = String.format("%1$2s", Integer.toString(levelNumber)).replaceAll("\\s", "0");
         FileHandle file = Gdx.files.internal(String.format("levels/%s.json", levelString));
@@ -128,6 +172,10 @@ public class Level {
 
         for (JsonValue grabbable : levelJson.get("grabbable").iterator()) {
             level.interactiveObjects.add(Grabbable.create(level, grabbable));
+        }
+
+        for (JsonValue doorway : levelJson.get("doorways").iterator()) {
+            level.doorways.add(Doorway.create(level, textures, doorway));
         }
 
         return level;
