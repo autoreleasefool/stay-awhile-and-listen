@@ -18,7 +18,7 @@ public class Player extends Human {
     }
 
     public void resetLocation() {
-        boundingBox.setPosition(0, 0);
+        boundingBox.setPosition(0, GameScreen.BLOCK_SIZE * 2);
     }
 
     public void handleInput(GameInput gameInput) {
@@ -41,7 +41,16 @@ public class Player extends Human {
 
         drawX -= getWidth() / 2;
 
-        spriteBatch.draw(textures.getPlayer(Human.Position.parseOrdinal(direction)),
+        int position = direction;
+        if (getYVelocity() != 0) {
+            position = 6 + direction;
+        } else {
+            if (getXVelocity() != 0) {
+                position = 2 + animation / 5 + direction * 2;
+            }
+        }
+
+        spriteBatch.draw(textures.getPlayer(Human.Position.parseOrdinal(position)),
                 drawX,
                 getY(),
                 getWidth(),

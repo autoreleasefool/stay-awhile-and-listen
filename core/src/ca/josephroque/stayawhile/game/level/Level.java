@@ -73,14 +73,14 @@ public class Level {
                 if (cells[y][x] != null) {
                   if (cells[y][x].type == CellType.Floor) {
                       drawn = true;
-                      spriteBatch.draw(textures.getColor(Textures.Color.Black),
+                      spriteBatch.draw(textures.getFloor(true),
                               x * GameScreen.BLOCK_SIZE - drawOffset,
                               y * GameScreen.BLOCK_SIZE,
                               GameScreen.BLOCK_SIZE,
                               GameScreen.BLOCK_SIZE);
                   } else if (cells[y][x].type == CellType.LowerFloor) {
                       drawn = true;
-                      spriteBatch.draw(textures.getColor(Textures.Color.Black),
+                      spriteBatch.draw(textures.getFloor(false),
                               x * GameScreen.BLOCK_SIZE - drawOffset,
                               y * GameScreen.BLOCK_SIZE,
                               GameScreen.BLOCK_SIZE,
@@ -89,7 +89,7 @@ public class Level {
                 }
 
                 if (!drawn) {
-                    spriteBatch.draw(textures.getColor(Textures.Color.Yellow),
+                    spriteBatch.draw(textures.getWall(y == 2),
                             x * GameScreen.BLOCK_SIZE - drawOffset,
                             y * GameScreen.BLOCK_SIZE,
                             GameScreen.BLOCK_SIZE,

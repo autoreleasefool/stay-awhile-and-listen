@@ -48,15 +48,6 @@ public class GameManager {
         switch (gameState) {
             case GamePlaying:
                 player.draw(textures, spriteBatch);
-
-                if (gameInput.isFingerDown()) {
-                    spriteBatch.draw(textures.getColor(Textures.Color.Yellow),
-                            gameInput.getLastFingerXCell() * GameScreen.BLOCK_SIZE,
-                            gameInput.getLastFingerYCell() * GameScreen.BLOCK_SIZE,
-                            GameScreen.BLOCK_SIZE,
-                            GameScreen.BLOCK_SIZE);
-                }
-
                 currentLevel.drawForeground(textures, spriteBatch);
                 break;
         }

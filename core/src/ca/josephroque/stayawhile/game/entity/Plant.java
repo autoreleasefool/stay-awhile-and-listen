@@ -10,8 +10,11 @@ import ca.josephroque.stayawhile.util.DisplayUtils;
 
 public class Plant extends Grabbable {
 
+    private final int blockHeight;
+
     public Plant(Level level, float x, float y, int blockHeight) {
         super(level, x, y, GameScreen.BLOCK_SIZE, blockHeight * GameScreen.BLOCK_SIZE);
+        this.blockHeight = blockHeight;
     }
 
     public void tick(float delta) {
@@ -19,7 +22,7 @@ public class Plant extends Grabbable {
     }
 
     public void draw(Textures textures, SpriteBatch spriteBatch) {
-        spriteBatch.draw(textures.getColor(Textures.Color.Green),
+        spriteBatch.draw(textures.getPlant(blockHeight),
                 getX() - level.getDrawOffset(),
                 getY(),
                 getWidth(),
@@ -29,7 +32,7 @@ public class Plant extends Grabbable {
             Color batchColor = spriteBatch.getColor();
             batchColor.a = 0.3f;
             spriteBatch.setColor(batchColor);
-            spriteBatch.draw(textures.getColor(Textures.Color.Green),
+            spriteBatch.draw(textures.getPlant(blockHeight),
                     DisplayUtils.getSnappedValue(getX() - level.getDrawOffset()),
                     DisplayUtils.getSnappedValue(getY()),
                     getWidth(),

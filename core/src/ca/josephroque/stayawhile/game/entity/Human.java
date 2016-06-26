@@ -16,6 +16,7 @@ public abstract class Human
 
     private float speed;
     protected int direction = 1;
+    protected int animation = 1;
 
     private boolean hasTarget = false;
     private int targetX = -1;
@@ -37,8 +38,14 @@ public abstract class Human
         super.updatePosition(delta);
         if (getXVelocity() < 0) {
             direction = 0;
+            if (++animation == 10)
+                animation = 0;
         } else if (getXVelocity() > 0) {
             direction = 1;
+            if (++animation == 10)
+                animation = 0;
+        } else {
+            animation = 0;
         }
     }
 
@@ -88,8 +95,14 @@ public abstract class Human
 
         public static Position parseOrdinal(int ordinal) {
             switch (ordinal) {
-                case 1: return Left;
-                case 2: return Right;
+                case 0: return Left;
+                case 1: return Right;
+                case 2: return LeftWalk1;
+                case 3: return LeftWalk2;
+                case 4: return RightWalk1;
+                case 5: return RightWalk2;
+                case 6: return LeftJump;
+                case 7: return RightJump;
                 default: return null;
             }
         }
