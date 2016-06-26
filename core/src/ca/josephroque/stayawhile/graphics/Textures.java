@@ -19,6 +19,7 @@ public class Textures {
     private TextureRegion[] other;
     private TextureRegion doorway;
     private TextureRegion[] speechBubble;
+    private TextureRegion continueBubble;
 
     public Textures() {
         Texture spriteSheet = new Texture(Gdx.files.internal("spritesheet.png"));
@@ -57,6 +58,12 @@ public class Textures {
         speechBubble[4] = new TextureRegion(spriteSheet, 0, 242, 1, 1);
         speechBubble[5] = new TextureRegion(spriteSheet, 1, 242, 1, 1);
 
+        continueBubble = new TextureRegion(spriteSheet, 16, 240, 48, 16);
+
+    }
+
+    public TextureRegion getContinueBubble() {
+        return continueBubble;
     }
 
     public TextureRegion getPlant(int height) {
