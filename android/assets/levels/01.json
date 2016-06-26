@@ -1,5 +1,6 @@
 {
   "type": "hallway",
+  "hasIntro": true,
   "length": 48,
   "grabbable": [
     {

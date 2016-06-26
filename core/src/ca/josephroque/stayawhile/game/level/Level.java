@@ -31,6 +31,7 @@ public class Level {
     private boolean lost;
     private boolean won;
     private Type type;
+    private boolean intro;
 
     private Level() {
         interactiveObjects = new ArrayList<Grabbable>();
@@ -214,6 +215,8 @@ public class Level {
 
         if (lost) {
             spriteBatch.draw(textures.getCaught(), 0, 0);
+        } else if (intro) {
+            spriteBatch.draw(textures.getIntro(), -getDrawOffset(), 0);
         }
     }
 
@@ -247,6 +250,8 @@ public class Level {
             level.cells = new Cell[GameScreen.VERTICAL_BLOCKS][GameScreen.HORIZONTAL_BLOCKS];
             level.type = Type.Room;
         }
+
+        level.intro = levelJson.getBoolean("hasIntro");
 
         for (JsonValue grabbable : levelJson.get("grabbable").iterator()) {
             level.interactiveObjects.add(Grabbable.create(level, grabbable));
