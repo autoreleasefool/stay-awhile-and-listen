@@ -17,11 +17,6 @@ public class Player extends Human {
         this.level = level;
     }
 
-    public void resetLocation() {
-        boundingBox.setPosition(0, GameScreen.BLOCK_SIZE * 2);
-        level.setPlayerLocation(getX(), getY());
-    }
-
     @Override
     public void tick(float delta) {
         super.tick(delta);
@@ -32,6 +27,7 @@ public class Player extends Human {
         if (gameInput.clickOccurred()) {
             setTarget(gameInput.getLastFingerXCell() * GameScreen.BLOCK_SIZE + (int) level.getDrawOffset(),
                     gameInput.getLastFingerYCell() * GameScreen.BLOCK_SIZE);
+            gameInput.consumeClick();
         }
     }
 

@@ -43,6 +43,10 @@ public class GameInput
         return getLastFingerYConstrained() / GameScreen.BLOCK_SIZE;
     }
 
+    public void consumeClick() {
+        mFingerJustReleased = false;
+    }
+
     public int getLastFingerXConstrained() {
         return DisplayUtils.constrain(0,
                 GameScreen.getScreenWidth(),

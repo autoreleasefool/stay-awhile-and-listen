@@ -34,6 +34,10 @@ public abstract class Human
         hasTarget = true;
     }
 
+    public void removeTarget() {
+        hasTarget = false;
+    }
+
     public void reset() {
         super.reset();
         direction = 1;

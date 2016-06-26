@@ -1,0 +1,9 @@
+{
+  "type": "room",
+  "grabbable": [
+    {
+      "type": "helmet",
+      "location": "dresser"
+    }
+  ]
+}

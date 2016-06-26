@@ -12,6 +12,7 @@ import java.util.List;
 import ca.josephroque.stayawhile.game.entity.Doorway;
 import ca.josephroque.stayawhile.game.entity.Entity;
 import ca.josephroque.stayawhile.game.entity.Grabbable;
+import ca.josephroque.stayawhile.game.entity.Player;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.screen.GameScreen;
@@ -25,6 +26,8 @@ public class Level {
     private float drawOffset = 0;
     private float playerX, playerY;
     private boolean lost;
+    private boolean won;
+    private Type type;
 
     private Level() {
         interactiveObjects = new ArrayList<Grabbable>();
@@ -95,6 +98,8 @@ public class Level {
                 doorway.tick(interactiveObjects, delta);
                 if (doorway.hasLost()) {
                     lose();
+                } else if (doorway.hasWon()) {
+                    win();
                 }
             }
         }
@@ -104,8 +109,16 @@ public class Level {
         lost = true;
     }
 
+    private void win() {
+        won = true;
+    }
+
     public boolean hasLost() {
         return lost;
+    }
+
+    public boolean hasWon() {
+        return won;
     }
 
     public void drawBackground(Textures textures, SpriteBatch spriteBatch, float playerX) {
@@ -117,35 +130,39 @@ public class Level {
 
         int off = (int) (drawOffset / GameScreen.BLOCK_SIZE);
 
-        for (int y = 0; y < cells.length; y++) {
-            for (int x = off; x - off < GameScreen.HORIZONTAL_BLOCKS + 1 && x < cells[y].length; x++) {
-                boolean drawn = false;
-                if (cells[y][x] != null) {
-                  if (cells[y][x].type == CellType.Floor) {
-                      drawn = true;
-                      spriteBatch.draw(textures.getFloor(true),
-                              x * GameScreen.BLOCK_SIZE - drawOffset,
-                              y * GameScreen.BLOCK_SIZE,
-                              GameScreen.BLOCK_SIZE,
-                              GameScreen.BLOCK_SIZE);
-                  } else if (cells[y][x].type == CellType.LowerFloor) {
-                      drawn = true;
-                      spriteBatch.draw(textures.getFloor(false),
-                              x * GameScreen.BLOCK_SIZE - drawOffset,
-                              y * GameScreen.BLOCK_SIZE,
-                              GameScreen.BLOCK_SIZE,
-                              GameScreen.BLOCK_SIZE);
-                  }
-                }
+        if (type == Type.Hallway) {
+            for (int y = 0; y < cells.length; y++) {
+                for (int x = off; x - off < GameScreen.HORIZONTAL_BLOCKS + 1 && x < cells[y].length; x++) {
+                    boolean drawn = false;
+                    if (cells[y][x] != null) {
+                        if (cells[y][x].type == CellType.Floor) {
+                            drawn = true;
+                            spriteBatch.draw(textures.getFloor(true),
+                                    x * GameScreen.BLOCK_SIZE - drawOffset,
+                                    y * GameScreen.BLOCK_SIZE,
+                                    GameScreen.BLOCK_SIZE,
+                                    GameScreen.BLOCK_SIZE);
+                        } else if (cells[y][x].type == CellType.LowerFloor) {
+                            drawn = true;
+                            spriteBatch.draw(textures.getFloor(false),
+                                    x * GameScreen.BLOCK_SIZE - drawOffset,
+                                    y * GameScreen.BLOCK_SIZE,
+                                    GameScreen.BLOCK_SIZE,
+                                    GameScreen.BLOCK_SIZE);
+                        }
+                    }
 
-                if (!drawn) {
-                    spriteBatch.draw(textures.getWall(y == 2),
-                            x * GameScreen.BLOCK_SIZE - drawOffset,
-                            y * GameScreen.BLOCK_SIZE,
-                            GameScreen.BLOCK_SIZE,
-                            GameScreen.BLOCK_SIZE);
+                    if (!drawn) {
+                        spriteBatch.draw(textures.getWall(y == 2),
+                                x * GameScreen.BLOCK_SIZE - drawOffset,
+                                y * GameScreen.BLOCK_SIZE,
+                                GameScreen.BLOCK_SIZE,
+                                GameScreen.BLOCK_SIZE);
+                    }
                 }
             }
+        } else {
+            spriteBatch.draw(textures.getBedroom(), 0, 0);
         }
     }
 
@@ -163,6 +180,14 @@ public class Level {
         }
     }
 
+    public void resetPlayerLocation(Player player) {
+        if (type == Type.Hallway) {
+            player.setPosition(0, GameScreen.BLOCK_SIZE * 2);
+        } else if (type == Type.Room) {
+            player.setPosition(GameScreen.BLOCK_SIZE, GameScreen.BLOCK_SIZE / 2);
+        }
+    }
+
     public static Level loadLevel(Textures textures, int levelNumber) {
         // Load the level file into a JSON object
         String levelString = String.format("%1$2s", Integer.toString(levelNumber)).replaceAll("\\s", "0");
@@ -172,22 +197,28 @@ public class Level {
         Level level = new Level();
 
         String levelType = levelJson.getString("type");
-        int levelLength = levelJson.getInt("length");
 
-        level.cells = new Cell[GameScreen.VERTICAL_BLOCKS][levelLength];
         if (levelType.equals("hallway")) {
+            int levelLength = levelJson.getInt("length");
+            level.cells = new Cell[GameScreen.VERTICAL_BLOCKS][levelLength];
             for (int i = 0; i < levelLength; i++) {
                 level.cells[0][i] = new Cell(i, 0, true, CellType.LowerFloor);
                 level.cells[1][i] = new Cell(i, 1, true, CellType.Floor);
             }
+            level.type = Type.Hallway;
+        } else if (levelType.equals("room")) {
+            level.cells = new Cell[GameScreen.VERTICAL_BLOCKS][GameScreen.HORIZONTAL_BLOCKS];
+            level.type = Type.Room;
         }
 
         for (JsonValue grabbable : levelJson.get("grabbable").iterator()) {
             level.interactiveObjects.add(Grabbable.create(level, grabbable));
         }
 
-        for (JsonValue doorway : levelJson.get("doorways").iterator()) {
-            level.doorways.add(Doorway.create(level, textures, doorway));
+        if (levelJson.get("doorways") != null) {
+            for (JsonValue doorway : levelJson.get("doorways").iterator()) {
+                level.doorways.add(Doorway.create(level, textures, doorway));
+            }
         }
 
         return level;
@@ -197,6 +228,11 @@ public class Level {
         Wall,
         Floor,
         LowerFloor,
+    }
+
+    private enum Type {
+        Hallway,
+        Room,
     }
 
     private static class Cell {

@@ -1,0 +1,9 @@
+{
+  "type": "room",
+  "grabbable": [
+    {
+      "type": "knittingneedles",
+      "location": "floor"
+    }
+  ]
+}

@@ -9,7 +9,7 @@ import ca.josephroque.stayawhile.game.entity.Human;
 
 public class Textures {
 
-    private Texture spriteSheet;
+    private Texture bedroom;
     private TextureRegion[] playerSprites;
     private TextureRegion[] oldLady;
     private TextureRegion[] oldMan;
@@ -21,7 +21,8 @@ public class Textures {
     private TextureRegion[] speechBubble;
 
     public Textures() {
-        spriteSheet = new Texture(Gdx.files.internal("spritesheet.png"));
+        Texture spriteSheet = new Texture(Gdx.files.internal("spritesheet.png"));
+        bedroom = new Texture(Gdx.files.internal("bedroom.png"));
 
         playerSprites = new TextureRegion[Human.Position.values().length];
         for (int i = 0; i < playerSprites.length; i++) {
@@ -109,6 +110,10 @@ public class Textures {
         spriteBatch.draw(speechBubble[5], x + 3, y + 1, width - 6, height - 2);
         spriteBatch.draw(speechBubble[5], x + width - 3, y + 1, 1, height - 2);
         spriteBatch.draw(speechBubble[5], x + width - 2, y + 2, 1, height - 4);
+    }
+
+    public Texture getBedroom() {
+        return bedroom;
     }
 
     public enum Props {

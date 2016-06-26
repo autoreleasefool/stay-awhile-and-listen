@@ -95,4 +95,12 @@ public abstract class Entity {
         boundingBox.setPosition(DisplayUtils.getSnappedValue(getX()),
                 DisplayUtils.getSnappedValue(getY()));
     }
+
+    public void setPosition(float x, float y) {
+        boundingBox.setPosition(x, y);
+        if (this instanceof Player) {
+            level.setPlayerLocation(x, y);
+            ((Player) this).removeTarget();
+        }
+    }
 }

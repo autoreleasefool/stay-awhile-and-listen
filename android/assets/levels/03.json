@@ -1,0 +1,9 @@
+{
+  "type": "room",
+  "grabbable": [
+    {
+      "type": "prunejuice",
+      "location": "bed"
+    }
+  ]
+}

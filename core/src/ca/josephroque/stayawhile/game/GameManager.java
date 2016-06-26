@@ -41,19 +41,19 @@ public class GameManager {
                 updateLevel();
             }
 
-            player.resetLocation();
-
+            currentLevel.resetPlayerLocation(player);
             gameScreen.setState(GameScreen.GameState.GamePlaying);
         }
 
-        player.handleInput(gameInput);
         player.tick(delta);
 
         currentLevel.handleInput(gameInput);
         currentLevel.tick(delta);
-        if (currentLevel.hasLost()) {
+        if (currentLevel.hasLost() || currentLevel.hasWon()) {
             gameScreen.setState(GameScreen.GameState.GameStarting);
         }
+
+        player.handleInput(gameInput);
     }
 
     public void draw(GameScreen.GameState gameState, SpriteBatch spriteBatch) {
