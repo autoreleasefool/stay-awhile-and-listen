@@ -87,9 +87,7 @@ public class Level {
             entity.handleInput(gameInput);
         }
 
-        Gdx.app.debug("Level", "Player X: " + getPlayerX() + " Left: " + (getWidth() - GameScreen.BLOCK_SIZE));
         if (type == Type.Room && getPlayerX() > getWidth() - GameScreen.BLOCK_SIZE * 2 && gameInput.clickOccurred()) {
-            Gdx.app.debug("Level", "Won");
             gameInput.consumeClick();
             win();
         }

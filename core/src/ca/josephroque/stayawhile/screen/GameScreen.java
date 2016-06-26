@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ca.josephroque.stayawhile.game.GameManager;
+import ca.josephroque.stayawhile.game.MainMenu;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.util.Dialog;
@@ -35,6 +36,7 @@ public class GameScreen
     private GameInput mGameInput;
     private GameManager mGameManager;
     private Textures mTextures;
+    private MainMenu menu;
 
     private GameState mGameState;
     private GameState mPausedState;
@@ -60,11 +62,9 @@ public class GameScreen
 
         // Setting up the game and menu
         Dialog.loadDialog();
-        mTextures = new Textures();
-        mGameManager = new GameManager(this, mGameInput, mTextures);
 
         // Displaying the main menu
-        setState(GameState.GameStarting);
+        setState(GameState.MainMenu);
     }
 
     @Override
@@ -81,6 +81,7 @@ public class GameScreen
     private void tick(float delta) {
         switch (mGameState) {
             case MainMenu:
+                menu.tick(mGameInput, delta);
                 break;
             case GameStarting:
             case GamePlaying:
@@ -102,15 +103,14 @@ public class GameScreen
         mSpriteBatch.begin();
         mSpriteBatch.enableBlending();
 
-//        mBackgroundManager.draw(mSpriteBatch);
-        mGameManager.draw(mGameState, mSpriteBatch);
-
         switch (mGameState) {
             case MainMenu:
+                menu.draw(mSpriteBatch);
                 break;
             case GameStarting:
             case GamePlaying:
             case GamePaused:
+                mGameManager.draw(mGameState, mSpriteBatch);
                 break;
             case Ended:
                 break;
@@ -154,6 +154,27 @@ public class GameScreen
         if (newState == GameState.GamePaused)
             mPausedState = mGameState;
         mGameState = newState;
+
+        switch (mGameState) {
+            case MainMenu:
+                mGameManager = null;
+                if (menu == null) {
+                    menu = new MainMenu(this);
+                }
+                break;
+            case GamePaused:
+            case GamePlaying:
+            case GameStarting:
+                if (menu != null) {
+                    menu.dispose();
+                    menu = null;
+                }
+                if (mGameManager == null) {
+                    mTextures = new Textures();
+                    mGameManager = new GameManager(this, mGameInput, mTextures);
+                }
+                break;
+        }
     }
 
     /**

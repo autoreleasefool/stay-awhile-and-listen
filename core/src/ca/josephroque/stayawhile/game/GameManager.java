@@ -57,14 +57,15 @@ public class GameManager {
     }
 
     public void draw(GameScreen.GameState gameState, SpriteBatch spriteBatch) {
+        if (currentLevel != null) {
+            currentLevel.drawBackground(textures, spriteBatch, player.getCenterX());
 
-        currentLevel.drawBackground(textures, spriteBatch, player.getCenterX());
-
-        switch (gameState) {
-            case GamePlaying:
-                currentLevel.drawForeground(textures, spriteBatch);
-                player.draw(textures, spriteBatch);
-                break;
+            switch (gameState) {
+                case GamePlaying:
+                    currentLevel.drawForeground(textures, spriteBatch);
+                    player.draw(textures, spriteBatch);
+                    break;
+            }
         }
     }
 
