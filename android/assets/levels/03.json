@@ -3,7 +3,12 @@
   "grabbable": [
     {
       "type": "prunejuice",
-      "location": "bed"
+      "location": "floor"
+    }
+  ],
+  "oldpeople": [
+    {
+      "type": "prunejuice"
     }
   ]
 }

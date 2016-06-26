@@ -1,10 +1,10 @@
 package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.util.List;
 
 import ca.josephroque.stayawhile.game.level.Level;
-import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.screen.GameScreen;
 import ca.josephroque.stayawhile.util.DisplayUtils;
 
@@ -27,6 +27,9 @@ public abstract class Human
         super(level, x, y, WIDTH, HEIGHT);
         this.speed = speed;
     }
+
+    public abstract void snapToFace(List<Grabbable> distractions);
+    public abstract boolean lost();
 
     public void setTarget(int x, int y) {
         targetX = x;
@@ -75,11 +78,6 @@ public abstract class Human
         }
 
         updatePosition(delta);
-    }
-
-    @Override
-    public void draw(Textures textures, SpriteBatch spriteBatch) {
-        // TODO: draw person
     }
 
     protected void jump() {

@@ -10,9 +10,19 @@ import ca.josephroque.stayawhile.screen.GameScreen;
 public abstract class Grabbable extends Entity {
 
     private boolean dragging = false;
+    private boolean canSnap = false;
 
     public Grabbable(Level level, float x, float y, float width, float height) {
         super(level, x, y, width, height);
+    }
+
+    @Override
+    public void tick(float delta) {
+        canSnap = false;
+    }
+
+    public boolean canSnap() {
+        return canSnap;
     }
 
     public void handleInput(GameInput gameInput) {
@@ -28,6 +38,7 @@ public abstract class Grabbable extends Entity {
 
             if (!gameInput.isFingerDown()) {
                 dragging = false;
+                canSnap = true;
                 snapToNearestCell();
             }
         }
@@ -74,7 +85,7 @@ public abstract class Grabbable extends Entity {
 
     private static int getPropY(String location) {
         if (location.equals("dresser")) {
-            return 49;
+            return 46;
         } else if (location.equals("bed")) {
             return 32;
         } else if (location.equals("floor")) {

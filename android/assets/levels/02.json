@@ -5,5 +5,10 @@
       "type": "helmet",
       "location": "dresser"
     }
+  ],
+  "oldpeople": [
+    {
+      "type": "helmet"
+    }
   ]
 }

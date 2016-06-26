@@ -32,6 +32,9 @@ public class Dialog {
         if (dialogs == null)
             return null;
 
+        if (nextDialog == dialogs.size())
+            nextDialog = 0;
+
         return dialogs.get(nextDialog++);
     }
 }

@@ -5,5 +5,10 @@
       "type": "knittingneedles",
       "location": "floor"
     }
+  ],
+  "oldpeople": [
+    {
+      "type": "knittingneedles"
+    }
   ]
 }

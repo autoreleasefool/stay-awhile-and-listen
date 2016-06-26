@@ -34,7 +34,7 @@ public class Doorway extends Entity {
         this.type = type;
 
         if (type != Type.Empty) {
-            oldPerson = new OldPerson(level, textures, x + GameScreen.BLOCK_SIZE / 2, y);
+            oldPerson = new OldPerson(level, textures, null, x + GameScreen.BLOCK_SIZE / 2, y);
         }
     }
 
@@ -44,14 +44,13 @@ public class Doorway extends Entity {
                     && level.getPlayerY() >= getY() && level.getPlayerY() <= getY() + getHeight());
         } else {
             oldPerson.tick(distractions, type, delta);
-            if (oldPerson.hasCaught())
+            if (oldPerson.lost())
                 lose();
         }
     }
 
     @Override
     public void tick(float delta) {
-
     }
 
     private void lose() {

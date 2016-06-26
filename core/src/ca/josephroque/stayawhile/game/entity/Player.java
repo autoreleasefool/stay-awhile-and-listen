@@ -2,6 +2,8 @@ package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.List;
+
 import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
@@ -21,6 +23,16 @@ public class Player extends Human {
     public void tick(float delta) {
         super.tick(delta);
         level.setPlayerLocation(getX(), getY());
+    }
+
+    @Override
+    public void snapToFace(List<Grabbable> distractions) {
+        // does nothing
+    }
+
+    @Override
+    public boolean lost() {
+        return false;
     }
 
     public void handleInput(GameInput gameInput) {

@@ -2,7 +2,6 @@ package ca.josephroque.stayawhile.game.entity;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ca.josephroque.stayawhile.game.level.Level;
 import ca.josephroque.stayawhile.graphics.Textures;
@@ -11,15 +10,15 @@ import ca.josephroque.stayawhile.util.DisplayUtils;
 
 public class Prop extends Grabbable {
 
-    Textures.Props type;
+    private Textures.Props type;
 
     public Prop(Level level, Textures.Props type, float x, float y) {
         super(level, x, y, GameScreen.BLOCK_SIZE, GameScreen.BLOCK_SIZE);
         this.type = type;
     }
 
-    public void tick(float delta) {
-
+    public Textures.Props getType() {
+        return type;
     }
 
     public void draw(Textures textures, SpriteBatch spriteBatch) {

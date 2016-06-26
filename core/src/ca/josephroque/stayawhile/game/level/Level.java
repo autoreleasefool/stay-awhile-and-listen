@@ -12,6 +12,8 @@ import java.util.List;
 import ca.josephroque.stayawhile.game.entity.Doorway;
 import ca.josephroque.stayawhile.game.entity.Entity;
 import ca.josephroque.stayawhile.game.entity.Grabbable;
+import ca.josephroque.stayawhile.game.entity.Human;
+import ca.josephroque.stayawhile.game.entity.OldPerson;
 import ca.josephroque.stayawhile.game.entity.Player;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
@@ -23,6 +25,7 @@ public class Level {
     private Cell[][] cells;
     private final List<Grabbable> interactiveObjects;
     private final List<Doorway> doorways;
+    private final List<OldPerson> npcs;
     private float drawOffset = 0;
     private float playerX, playerY;
     private boolean lost;
@@ -32,6 +35,7 @@ public class Level {
     private Level() {
         interactiveObjects = new ArrayList<Grabbable>();
         doorways = new ArrayList<Doorway>();
+        npcs = new ArrayList<OldPerson>();
     }
 
     public boolean canEnterCell(int x, int y) {
@@ -76,6 +80,10 @@ public class Level {
         for (Entity entity : doorways) {
             entity.reset();
         }
+
+        for (Entity entity : npcs) {
+            entity.reset();
+        }
     }
 
     public void handleInput(GameInput gameInput) {
@@ -99,6 +107,14 @@ public class Level {
     public void tick(float delta) {
         if (lost)
             return;
+
+        for (OldPerson npc : npcs) {
+            npc.tick(interactiveObjects, Doorway.Type.Still, delta);
+            npc.snapToFace(interactiveObjects);
+            npc.setTarget((int) playerX, (int) playerY);
+            if (npc.lost())
+                lose();
+        }
 
         for (Entity entity : interactiveObjects) {
             entity.tick(delta);
@@ -184,6 +200,12 @@ public class Level {
             }
         }
 
+        for (Human npc : npcs) {
+            if (DisplayUtils.isOnScreen(this, npc.getX(), npc.getWidth())) {
+                npc.draw(textures, spriteBatch);
+            }
+        }
+
         for (Entity entity : interactiveObjects) {
             if (DisplayUtils.isOnScreen(this, entity.getX(), entity.getWidth())) {
                 entity.draw(textures, spriteBatch);
@@ -233,6 +255,21 @@ public class Level {
         if (levelJson.get("doorways") != null) {
             for (JsonValue doorway : levelJson.get("doorways").iterator()) {
                 level.doorways.add(Doorway.create(level, textures, doorway));
+            }
+        }
+
+        if (levelJson.get("oldpeople") != null) {
+            for (JsonValue oldPerson : levelJson.get("oldpeople").iterator()) {
+                Textures.Props prop = null;
+                String type = oldPerson.getString("type");
+                if (type.equals("knittingneedles"))
+                    prop = Textures.Props.KnittingNeedles;
+                else if (type.equals("helmet"))
+                    prop = Textures.Props.Helmet;
+                else if (type.equals("prunejuice"))
+                    prop = Textures.Props.PruneJuice;
+                OldPerson person = new OldPerson(level, textures, prop, GameScreen.WORLD_WIDTH / 2 - GameScreen.BLOCK_SIZE / 2, GameScreen.BLOCK_SIZE / 2);
+                level.npcs.add(person);
             }
         }
 

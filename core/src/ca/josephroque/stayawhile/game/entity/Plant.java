@@ -17,10 +17,6 @@ public class Plant extends Grabbable {
         this.blockHeight = blockHeight;
     }
 
-    public void tick(float delta) {
-
-    }
-
     public void draw(Textures textures, SpriteBatch spriteBatch) {
         spriteBatch.draw(textures.getPlant(blockHeight),
                 getX() - level.getDrawOffset(),

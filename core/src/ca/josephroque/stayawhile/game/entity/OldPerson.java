@@ -17,7 +17,7 @@ import ca.josephroque.stayawhile.input.GameInput;
 import ca.josephroque.stayawhile.screen.GameScreen;
 import ca.josephroque.stayawhile.util.Dialog;
 
-public class OldPerson extends Entity {
+public class OldPerson extends Human {
 
     private BitmapFont font = new BitmapFont();
     private GlyphLayout fontLayout = new GlyphLayout();
@@ -32,9 +32,13 @@ public class OldPerson extends Entity {
     private boolean rotated;
     private boolean blocked;
     private boolean caught;
+    private Grabbable distractingItem;
 
-    public OldPerson(Level level, Textures textures, float x, float y) {
-        super(level, x, y, GameScreen.BLOCK_SIZE, GameScreen.BLOCK_SIZE * 2);
+    private Textures.Props prop;
+
+    public OldPerson(Level level, Textures textures, Textures.Props prop, float x, float y) {
+        super(level, x, y, Human.getAverageSpeed() * 0.25f);
+        this.prop = prop;
 
         font.setColor(Color.BLACK);
         font.getData().setScale(0.4f, 0.4f);
@@ -97,6 +101,7 @@ public class OldPerson extends Entity {
     @Override
     public void reset() {
         super.reset();
+        distractingItem = null;
         dialogTimer = 0;
         currentDialog = 0;
         rotationTimer = 0;
@@ -106,10 +111,11 @@ public class OldPerson extends Entity {
 
     @Override
     public void tick(float delta) {
-
+        super.tick(delta);
     }
 
     public void tick(List<Grabbable> distractions, Doorway.Type type,  float delta) {
+        super.tick(delta);
         if (type == Doorway.Type.Rotates) {
             rotationTimer += delta;
             if (rotationTimer > 5) {
@@ -119,7 +125,7 @@ public class OldPerson extends Entity {
         }
 
         dialogTimer += delta;
-        if (dialogTimer > 4) {
+        if (dialogTimer > 2.5) {
             dialogTimer = 0;
             if (++currentDialog >= dialogs.size())
                 currentDialog = 0;
@@ -127,11 +133,19 @@ public class OldPerson extends Entity {
 
         blocked = false;
         for (Grabbable grabbable : distractions) {
-            if (grabbable.getX() + grabbable.getWidth() > getX() + GameScreen.BLOCK_SIZE / 2
-                    && grabbable.getX() < getX() + GameScreen.BLOCK_SIZE + GameScreen.BLOCK_SIZE / 2
-                    && grabbable.getY() + grabbable.getHeight() > getY() + GameScreen.BLOCK_SIZE
-                    && grabbable.getY() < getY() + GameScreen.BLOCK_SIZE * 3)
-                blocked = true;
+            if (distractedBy(grabbable)) {
+                if (grabbable.getX() + grabbable.getWidth() > getX() + GameScreen.BLOCK_SIZE / 2
+                        && grabbable.getX() < getX() + GameScreen.BLOCK_SIZE + GameScreen.BLOCK_SIZE / 2
+                        && grabbable.getY() + grabbable.getHeight() > getY() + GameScreen.BLOCK_SIZE
+                        && grabbable.getY() < getY() + GameScreen.BLOCK_SIZE * 2) {
+                    blocked = true;
+                    distractingItem = grabbable;
+                }
+            }
+        }
+
+        if (!blocked) {
+            distractingItem = null;
         }
 
         if (!blocked && !rotated && level.getPlayerX() + GameScreen.BLOCK_SIZE >= getX() + 3 && level.getPlayerX() <= getX() + getWidth() - 3
@@ -140,8 +154,48 @@ public class OldPerson extends Entity {
         }
     }
 
-    public boolean hasCaught() {
+    public boolean lost() {
         return caught;
+    }
+
+    public boolean distractedBy(Grabbable grabbable) {
+        if (grabbable.isDragging())
+            return false;
+
+        if (this.prop == null)
+            return grabbable instanceof Plant;
+        else {
+            if (grabbable instanceof Prop) {
+                Prop prop = (Prop) grabbable;
+                return (this.prop == prop.getType());
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void updatePosition(float delta) {
+        if (!blocked)
+            super.updatePosition(delta);
+    }
+
+    @Override
+    public void snapToFace(List<Grabbable> distractions) {
+        for (Grabbable grabbable : distractions) {
+            if (distractingItem == grabbable && distractingItem.canSnap()) {
+                if (grabbable instanceof Prop) {
+                    switch (((Prop) grabbable).getType()) {
+                        case Helmet:
+                            grabbable.setPosition(getX() + GameScreen.BLOCK_SIZE / 2, getY() + GameScreen.BLOCK_SIZE + 2);
+                            break;
+                        case KnittingNeedles:
+                        case PruneJuice:
+                            grabbable.setPosition(getX(), getY() + 4);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -152,7 +206,8 @@ public class OldPerson extends Entity {
                 regions[0].getRegionWidth(),
                 regions[0].getRegionHeight());
 
-        String dialog = blocked ? "Hey! Where'd you go?" : dialogs.get(currentDialog);
+
+        String dialog = blocked ? getBlockedText() : dialogs.get(currentDialog);
         fontLayout.setText(font, dialog, Color.BLACK, GameScreen.BLOCK_SIZE * 3, Align.left, true);
 
         textures.drawSpeechBubble(fontLayout.width,
@@ -164,6 +219,21 @@ public class OldPerson extends Entity {
                 fontLayout,
                 getX() + getWidth() - level.getDrawOffset() + 6,
                 getY() + GameScreen.BLOCK_SIZE * 3);
+    }
+
+    private String getBlockedText() {
+        if (prop != null) {
+            switch (prop) {
+                case Helmet:
+                    return "Whoa! Who turned out the lights?";
+                case PruneJuice:
+                    return "Don't talk to me! Nurse! I need a change of underwear.";
+                case KnittingNeedles:
+                    return "Give me that! You'll ruin my scarf!";
+            }
+        }
+
+        return "Hey! Where'd you go?";
     }
 
     @Override
