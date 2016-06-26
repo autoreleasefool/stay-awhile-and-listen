@@ -5,36 +5,52 @@
     {
       "type": "plant",
       "size": "1",
-      "x": "15",
+      "x": "7",
       "y": "2"
     },
     {
       "type": "plant",
       "size": "1",
-      "x": "18",
+      "x": "10",
       "y": "2"
     },
     {
       "type": "plant",
       "size": "2",
-      "x": "31",
+      "x": "23",
       "y": "2"
     },
     {
       "type": "plant",
       "size": "2",
-      "x": "34",
+      "x": "26",
+      "y": "2"
+    },
+    {
+      "type": "plant",
+      "size": "2",
+      "x": "39",
+      "y": "2"
+    },
+    {
+      "type": "plant",
+      "size": "2",
+      "x": "42",
       "y": "2"
     }
   ],
   "doorways": [
     {
       "type": "rotates",
-      "x": 16
+      "x": 8
     },
     {
       "type": "still",
-      "x": 32
+      "x": 24
+    },
+    {
+      "type": "empty",
+      "x": 40
     }
   ]
 }
