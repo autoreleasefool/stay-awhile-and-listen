@@ -63,6 +63,17 @@ public class Level {
         return drawOffset;
     }
 
+    public void reset() {
+        lost = false;
+        for (Entity entity : interactiveObjects) {
+            entity.reset();
+        }
+
+        for (Entity entity : doorways) {
+            entity.reset();
+        }
+    }
+
     public void handleInput(GameInput gameInput) {
         for (Entity entity : interactiveObjects) {
             entity.handleInput(gameInput);

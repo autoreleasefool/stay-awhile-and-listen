@@ -29,8 +29,20 @@ public class GameManager {
 
     public void tick(GameScreen.GameState gameState, float delta) {
         if (gameState == GameScreen.GameState.GameStarting) {
-            updateLevel();
+            boolean reset = false;
+            if (currentLevel != null) {
+                if (currentLevel.hasLost()) {
+                    reset = true;
+                    currentLevel.reset();
+                }
+            }
+
+            if (!reset) {
+                updateLevel();
+            }
+
             player.resetLocation();
+
             gameScreen.setState(GameScreen.GameState.GamePlaying);
         }
 
@@ -40,7 +52,6 @@ public class GameManager {
         currentLevel.handleInput(gameInput);
         currentLevel.tick(delta);
         if (currentLevel.hasLost()) {
-            levelNumber--;
             gameScreen.setState(GameScreen.GameState.GameStarting);
         }
     }

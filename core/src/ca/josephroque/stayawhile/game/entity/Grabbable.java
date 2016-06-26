@@ -36,6 +36,11 @@ public abstract class Grabbable extends Entity {
         return dragging;
     }
 
+    public void reset() {
+        super.reset();
+        dragging = false;
+    }
+
     public static Grabbable create(Level level, JsonValue json) {
         String type = json.getString("type");
         if (type.equals("plant")) {

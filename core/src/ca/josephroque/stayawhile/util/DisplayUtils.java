@@ -35,6 +35,6 @@ public class DisplayUtils {
     }
 
     public static boolean isOnScreen(Level level, float x, float width) {
-        return x + width > level.getDrawOffset() && x < level.getDrawOffset() + level.getWidth();
+        return x + width > level.getDrawOffset() && x < level.getDrawOffset() + GameScreen.WORLD_WIDTH;
     }
 }

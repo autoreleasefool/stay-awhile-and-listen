@@ -14,6 +14,10 @@ public abstract class Entity {
     protected Rectangle boundingBox;
     float xVelocity;
     float yVelocity;
+    final float initialX;
+    final float initialY;
+    final float initialWidth;
+    final float initialHeight;
 
     protected Level level;
 
@@ -26,6 +30,17 @@ public abstract class Entity {
     public Entity(Level level, float x, float y, float width, float height) {
         this.level = level;
         boundingBox = new Rectangle(x, y, width, height);
+
+        this.initialX = x;
+        this.initialY = y;
+        this.initialWidth = width;
+        this.initialHeight = height;
+    }
+
+    public void reset() {
+        boundingBox.set(initialX, initialY, initialWidth, initialHeight);
+        setXVelocity(0);
+        setYVelocity(0);
     }
 
     public float getX() {

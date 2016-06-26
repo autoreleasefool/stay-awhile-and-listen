@@ -34,6 +34,13 @@ public abstract class Human
         hasTarget = true;
     }
 
+    public void reset() {
+        super.reset();
+        direction = 1;
+        animation = 1;
+        hasTarget = false;
+    }
+
     @Override
     public void updatePosition(float delta) {
         super.updatePosition(delta);

@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import ca.josephroque.stayawhile.game.GameManager;
 import ca.josephroque.stayawhile.graphics.Textures;
 import ca.josephroque.stayawhile.input.GameInput;
+import ca.josephroque.stayawhile.util.Dialog;
 
 public class GameScreen
         implements Screen {
@@ -58,6 +59,7 @@ public class GameScreen
         Gdx.input.setInputProcessor(mGameInput);
 
         // Setting up the game and menu
+        Dialog.loadDialog();
         mTextures = new Textures();
         mGameManager = new GameManager(this, mGameInput, mTextures);
 
