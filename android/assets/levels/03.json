@@ -3,13 +3,13 @@
   "hasIntro": false,
   "grabbable": [
     {
-      "type": "prunejuice",
+      "type": "knittingneedles",
       "location": "floor"
     }
   ],
   "oldpeople": [
     {
-      "type": "prunejuice"
+      "type": "knittingneedles"
     }
   ]
 }
