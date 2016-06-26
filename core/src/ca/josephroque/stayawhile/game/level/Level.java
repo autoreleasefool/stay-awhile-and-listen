@@ -65,6 +65,7 @@ public class Level {
 
     public void reset() {
         lost = false;
+        drawOffset = 0;
         for (Entity entity : interactiveObjects) {
             entity.reset();
         }
