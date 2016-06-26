@@ -32,6 +32,7 @@ public class GameManager {
             boolean reset = false;
             if (currentLevel != null) {
                 if (currentLevel.hasLost()) {
+                    gameInput.consumeClick();
                     reset = true;
                     currentLevel.reset();
                 }
@@ -45,15 +46,20 @@ public class GameManager {
             gameScreen.setState(GameScreen.GameState.GamePlaying);
         }
 
-        player.tick(delta);
+        if (!currentLevel.hasLost()) {
+            player.tick(delta);
+        }
 
         currentLevel.handleInput(gameInput);
         currentLevel.tick(delta);
-        if (currentLevel.hasLost() || currentLevel.hasWon()) {
+        if ((currentLevel.hasLost() && gameInput.clickOccurred()) || currentLevel.hasWon()) {
+            gameInput.consumeClick();
             gameScreen.setState(GameScreen.GameState.GameStarting);
         }
 
-        player.handleInput(gameInput);
+        if (!currentLevel.hasLost()) {
+            player.handleInput(gameInput);
+        }
     }
 
     public void draw(GameScreen.GameState gameState, SpriteBatch spriteBatch) {

@@ -98,6 +98,8 @@ public abstract class Entity {
 
     public void setPosition(float x, float y) {
         boundingBox.setPosition(x, y);
+        setXVelocity(0);
+        setYVelocity(0);
         if (this instanceof Player) {
             level.setPlayerLocation(x, y);
             ((Player) this).removeTarget();

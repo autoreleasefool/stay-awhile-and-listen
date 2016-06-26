@@ -79,6 +79,9 @@ public class Level {
     }
 
     public void handleInput(GameInput gameInput) {
+        if (lost)
+            return;
+
         for (Entity entity : interactiveObjects) {
             entity.handleInput(gameInput);
         }
@@ -94,6 +97,9 @@ public class Level {
     }
 
     public void tick(float delta) {
+        if (lost)
+            return;
+
         for (Entity entity : interactiveObjects) {
             entity.tick(delta);
         }
@@ -182,6 +188,10 @@ public class Level {
             if (DisplayUtils.isOnScreen(this, entity.getX(), entity.getWidth())) {
                 entity.draw(textures, spriteBatch);
             }
+        }
+
+        if (lost) {
+            spriteBatch.draw(textures.getCaught(), 0, 0);
         }
     }
 

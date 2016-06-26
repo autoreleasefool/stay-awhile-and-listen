@@ -10,6 +10,7 @@ import ca.josephroque.stayawhile.game.entity.Human;
 public class Textures {
 
     private Texture bedroom;
+    private Texture caught;
     private TextureRegion[] playerSprites;
     private TextureRegion[] oldLady;
     private TextureRegion[] oldMan;
@@ -24,6 +25,7 @@ public class Textures {
     public Textures() {
         Texture spriteSheet = new Texture(Gdx.files.internal("spritesheet.png"));
         bedroom = new Texture(Gdx.files.internal("bedroom.png"));
+        caught = new Texture(Gdx.files.internal("caught.png"));
 
         playerSprites = new TextureRegion[Human.Position.values().length];
         for (int i = 0; i < playerSprites.length; i++) {
@@ -59,7 +61,10 @@ public class Textures {
         speechBubble[5] = new TextureRegion(spriteSheet, 1, 242, 1, 1);
 
         continueBubble = new TextureRegion(spriteSheet, 16, 240, 48, 16);
+    }
 
+    public Texture getCaught() {
+        return caught;
     }
 
     public TextureRegion getContinueBubble() {
